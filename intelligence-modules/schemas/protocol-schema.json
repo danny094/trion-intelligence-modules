@@ -1,0 +1,289 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/trion-intelligence-modules/protocol-schema.json",
+  "title": "TRION Intelligence Module Protocol Schema",
+  "description": "Schema for structured reasoning protocols in TRION system",
+  "type": "object",
+  "required": ["protocol"],
+  "properties": {
+    "protocol": {
+      "type": "object",
+      "required": [
+        "name",
+        "version",
+        "description",
+        "when_to_use",
+        "steps",
+        "expert_excerpt",
+        "typical_complexity"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[A-Z][a-zA-Z-]+$",
+          "description": "Protocol name in PascalCase or Kebab-Case",
+          "examples": ["Plan-Act-Verify", "Bayesian-Update", "Causal-Reasoning"]
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$",
+          "description": "Semantic version (major.minor.patch)",
+          "examples": ["1.0.0", "2.1.3"]
+        },
+        "description": {
+          "type": "string",
+          "minLength": 20,
+          "maxLength": 500,
+          "description": "Clear explanation of what this protocol does and when to use it"
+        },
+        "when_to_use": {
+          "type": "object",
+          "required": ["task_patterns", "complexity_range"],
+          "properties": {
+            "task_patterns": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "minLength": 3
+              },
+              "description": "Task characteristics that trigger this protocol",
+              "examples": [
+                ["multi-step", "sequential", "testable"],
+                ["causal-analysis", "confounders", "counterfactual"],
+                ["uncertainty", "probability", "confidence"]
+              ]
+            },
+            "complexity_range": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "items": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 10
+              },
+              "description": "Min and max complexity this protocol handles [min, max]",
+              "examples": [[3, 7], [5, 10], [1, 5]]
+            },
+            "uncertainty_tolerance": {
+              "type": "string",
+              "enum": ["low", "medium", "high"],
+              "description": "How much uncertainty this protocol can handle",
+              "default": "medium"
+            },
+            "domain": {
+              "type": "string",
+              "description": "Domain specificity (general, data-analysis, code-review, etc.)",
+              "default": "general",
+              "examples": ["general", "data-analysis", "causal-inference", "planning"]
+            }
+          }
+        },
+        "steps": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "object",
+            "required": ["phase", "description", "outputs", "validation"],
+            "properties": {
+              "phase": {
+                "type": "string",
+                "minLength": 2,
+                "description": "Name of this reasoning phase",
+                "examples": ["Plan", "Act", "Verify", "Analyze", "Synthesize"]
+              },
+              "description": {
+                "type": "string",
+                "minLength": 10,
+                "description": "What happens in this phase"
+              },
+              "procedure": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Specific actions to take in this phase (optional but recommended)"
+              },
+              "outputs": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string",
+                  "minLength": 2
+                },
+                "description": "Expected outputs from this phase",
+                "examples": [
+                  ["step_list", "success_criteria"],
+                  ["hypotheses", "prior_probabilities"],
+                  ["confounders_list", "causal_graph"]
+                ]
+              },
+              "validation": {
+                "type": "string",
+                "minLength": 10,
+                "description": "How to verify this phase succeeded"
+              },
+              "failure_modes": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Common ways this phase can fail (optional but recommended)"
+              },
+              "dependencies": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Which previous phases this depends on (optional)"
+              }
+            }
+          },
+          "description": "Ordered phases of the reasoning protocol"
+        },
+        "expert_excerpt": {
+          "type": "object",
+          "required": ["description", "key_points"],
+          "properties": {
+            "description": {
+              "type": "string",
+              "minLength": 20,
+              "description": "Simplified explanation for Skill-Agent execution"
+            },
+            "key_points": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 5,
+              "items": {
+                "type": "string",
+                "minLength": 5
+              },
+              "description": "Most important principles (2-5 items)"
+            },
+            "checklist": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Actionable verification checklist (optional but recommended)"
+            },
+            "common_mistakes": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Mistakes to avoid (optional but helpful)"
+            }
+          },
+          "description": "Simplified version for single-step agent execution"
+        },
+        "typical_complexity": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10,
+          "description": "Typical task complexity this protocol handles (1=simple, 10=very complex)"
+        },
+        "needs_expert": {
+          "type": "boolean",
+          "description": "Whether this protocol typically requires expert agent",
+          "default": false
+        },
+        "compute_requirements": {
+          "type": "string",
+          "enum": ["low", "medium", "high"],
+          "description": "Computational resources needed",
+          "default": "low"
+        },
+        "advantages": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Benefits of using this protocol (optional but recommended)"
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Limitations or cases where protocol doesn't apply (optional but recommended)"
+        },
+        "examples": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["task", "expected_approach"],
+            "properties": {
+              "task": {
+                "type": "string",
+                "description": "Example task description"
+              },
+              "expected_approach": {
+                "type": "string",
+                "description": "How protocol guides this task"
+              },
+              "expected_outputs": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "What outputs would be produced (optional)"
+              }
+            }
+          },
+          "description": "Concrete examples of protocol application (optional but very helpful)"
+        },
+        "references": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["title"],
+            "properties": {
+              "title": {
+                "type": "string",
+                "description": "Reference title or description"
+              },
+              "url": {
+                "type": "string",
+                "format": "uri",
+                "description": "URL to reference (optional)"
+              },
+              "author": {
+                "type": "string",
+                "description": "Author or source (optional)"
+              }
+            }
+          },
+          "description": "Sources or inspirations for this protocol (optional)"
+        },
+        "metadata": {
+          "type": "object",
+          "properties": {
+            "author": {
+              "type": "string",
+              "description": "Protocol creator"
+            },
+            "created": {
+              "type": "string",
+              "format": "date",
+              "description": "Creation date (YYYY-MM-DD)"
+            },
+            "updated": {
+              "type": "string",
+              "format": "date",
+              "description": "Last update date (YYYY-MM-DD)"
+            },
+            "status": {
+              "type": "string",
+              "enum": ["draft", "review", "approved", "deprecated"],
+              "description": "Protocol status",
+              "default": "draft"
+            }
+          },
+          "description": "Protocol metadata (optional)"
+        }
+      }
+    }
+  }
+}

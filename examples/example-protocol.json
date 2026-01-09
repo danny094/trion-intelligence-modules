@@ -1,0 +1,175 @@
+{
+  "protocol": {
+    "name": "Plan-Act-Verify",
+    "version": "1.0.0",
+    "description": "Structured approach for multi-step tasks requiring validation at each phase. Breaks complex tasks into testable chunks with explicit success criteria.",
+    
+    "when_to_use": {
+      "task_patterns": [
+        "multi-step",
+        "sequential",
+        "testable",
+        "validation-required",
+        "structured-execution"
+      ],
+      "complexity_range": [4, 8],
+      "uncertainty_tolerance": "medium",
+      "domain": "general"
+    },
+    
+    "steps": [
+      {
+        "phase": "Plan",
+        "description": "Break task into discrete, testable steps with clear success criteria",
+        "procedure": [
+          "Identify task goal and constraints",
+          "Break into atomic sub-tasks",
+          "Define success criteria for each step",
+          "Identify dependencies between steps",
+          "Estimate resources per step"
+        ],
+        "outputs": [
+          "step_list",
+          "success_criteria",
+          "dependencies",
+          "resource_estimates"
+        ],
+        "validation": "Each step has clear, measurable success criteria and all dependencies identified",
+        "failure_modes": [
+          "Steps too large or vague",
+          "Success criteria not measurable",
+          "Dependencies missed"
+        ]
+      },
+      {
+        "phase": "Act",
+        "description": "Execute steps sequentially, validating each before proceeding to next",
+        "procedure": [
+          "Execute one step at a time",
+          "Check success criteria after each step",
+          "Document results and issues",
+          "Pause if validation fails",
+          "Proceed only when validated"
+        ],
+        "outputs": [
+          "execution_results",
+          "validation_status_per_step",
+          "intermediate_artifacts"
+        ],
+        "validation": "All steps executed in order and each validated before proceeding",
+        "failure_modes": [
+          "Proceeding without validation",
+          "Skipping failed steps",
+          "Losing intermediate results"
+        ],
+        "dependencies": ["Plan"]
+      },
+      {
+        "phase": "Verify",
+        "description": "Check overall task completion against original goals and criteria",
+        "procedure": [
+          "Review all step results",
+          "Check against original success criteria",
+          "Identify discrepancies",
+          "Assess overall confidence",
+          "Document what worked and what didn't"
+        ],
+        "outputs": [
+          "verification_report",
+          "confidence_score",
+          "discrepancies",
+          "recommendations"
+        ],
+        "validation": "All original success criteria evaluated and confidence score computed",
+        "failure_modes": [
+          "Not checking against original goals",
+          "Ignoring discrepancies",
+          "Overconfident assessment"
+        ],
+        "dependencies": ["Act"]
+      }
+    ],
+    
+    "expert_excerpt": {
+      "description": "When executing a step, ensure it has testable outcomes and validate before proceeding",
+      "key_points": [
+        "Every step must have measurable success criteria",
+        "Validate each step before moving to next",
+        "Document what works and what doesn't",
+        "Pause and reassess if validation fails"
+      ],
+      "checklist": [
+        "Success criteria defined and measurable",
+        "Step executed completely",
+        "Results match success criteria",
+        "Intermediate results preserved",
+        "Dependencies satisfied"
+      ],
+      "common_mistakes": [
+        "Skipping validation to save time",
+        "Making success criteria too vague",
+        "Not documenting failures properly"
+      ]
+    },
+    
+    "typical_complexity": 6,
+    "needs_expert": false,
+    "compute_requirements": "low",
+    
+    "advantages": [
+      "Clear structure and progress tracking",
+      "Early error detection through validation",
+      "Reproducible and debuggable",
+      "Partial results still useful if interrupted",
+      "Natural checkpoints for review"
+    ],
+    
+    "limitations": [
+      "Overhead for very simple tasks",
+      "May feel rigid for creative work",
+      "Requires upfront planning effort",
+      "Not suitable for exploratory tasks"
+    ],
+    
+    "examples": [
+      {
+        "task": "Create a data analysis report from CSV file",
+        "expected_approach": "Plan: [Load data, Validate structure, Clean data, Analyze patterns, Create visualizations, Write report]. Act: Execute each step with validation (e.g., after 'Validate structure', confirm no critical errors before proceeding to 'Clean data'). Verify: Check report completeness against requirements.",
+        "expected_outputs": [
+          "step_list with 6 steps",
+          "success_criteria per step",
+          "validated execution results",
+          "final verification report"
+        ]
+      },
+      {
+        "task": "Debug and fix application error",
+        "expected_approach": "Plan: [Reproduce error, Identify root cause, Design fix, Implement fix, Test fix, Deploy]. Act: Validate each step (e.g., 'Reproduce error' must show consistent reproduction before moving to 'Identify root cause'). Verify: Confirm error no longer occurs and no regressions.",
+        "expected_outputs": [
+          "reproduction steps",
+          "root cause analysis",
+          "fix implementation",
+          "test results",
+          "deployment confirmation"
+        ]
+      }
+    ],
+    
+    "references": [
+      {
+        "title": "Software Engineering Best Practices",
+        "author": "IEEE Standards"
+      },
+      {
+        "title": "Scientific Method",
+        "url": "https://en.wikipedia.org/wiki/Scientific_method"
+      }
+    ],
+    
+    "metadata": {
+      "author": "TRION Team (Example Protocol)",
+      "created": "2026-01-08",
+      "status": "approved"
+    }
+  }
+}
